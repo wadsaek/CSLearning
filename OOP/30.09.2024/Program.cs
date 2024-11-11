@@ -5,22 +5,24 @@ namespace _30._09_2024;
 class Program
 {
     static void Main(string[] args){
-        Malben[] arr = new Malben[3];
-        for(int i = 0; i<3; i++){
-            Console.WriteLine("enter the data for Rectangle #{0}",i);
-            #nullable disable
-            Console.Write("Length: ");
-            double len = double.Parse(Console.ReadLine());
-            Console.Write("Width: ");
-            double width = double.Parse(Console.ReadLine());
-            #nullable enable
+        double a = new Temperature()
+            .SetKelvin(4) // same Temperature;
+            .GetFahrenheit();
+        /*Console.WriteLine(a);*/
 
-            arr[i] = new Malben(len,width);
-        }
+        Temperature t1 = new Temperature().SetFahrenheit(100);
+        Temperature t2 = new Temperature().SetCelsius(65);
+        (t1, t2) = (t2, t1);
+        Console.WriteLine($"t1 in C = {t1.GetCelsius()}");
+        Console.WriteLine($"t2 in C = {t2.GetCelsius()}");
 
-        for(int i = 0; i<3; i++){
-            Console.WriteLine(arr[i]);
-        }
+        int i1 = 4;
+        int i2 = 5;
+        /*int temp = i2;*/
+        /*i2 = i1;*/
+        /*i1 = temp;*/
+        (i2, i1) = (i1, i2);
+        Console.WriteLine($"i1, i2 = {i1}, {i2}");
     }
 }
 

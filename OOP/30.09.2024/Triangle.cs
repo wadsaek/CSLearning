@@ -85,7 +85,7 @@ class Triange{
                 return Vector2.Zero;
         }
     }
-    private Vector2[] Points() => [point1, point2, point3];
+    private Vector2[] Points() {return new Vector2[]{point1, point2, point3};}
 
     public void Translate(Vector2 translation){
         Vector2[] points = Points();
