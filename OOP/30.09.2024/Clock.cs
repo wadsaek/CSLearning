@@ -4,12 +4,9 @@ class Clock {
     ulong seconds;
     
     public Clock(byte seconds, byte minutes, byte hours){
-        if(minutes < 60){
-            this.seconds += (ulong)minutes * 60;
-        }
-        if(seconds < 60){
-            this.seconds += (ulong)seconds;
-        }
+        AddHours(hours);
+        AddMinutes(minutes);
+        AddSeconds(seconds);
     }
 
     public Clock(){}
@@ -20,18 +17,21 @@ class Clock {
         }
     }
     public void AddMinutes(byte minutes){
-        if(minutes < 24){
+        if(minutes < 60){
             this.seconds += (ulong)minutes * 60;
         }
     }
-    public void AddSecond(byte seconds){
-        if(seconds < 24){
+    public void AddSeconds(byte seconds){
+        if(seconds < 60){
             this.seconds += (ulong)seconds;
         }
     }
     
-    public byte GetHours(bool _24Hour) {
-        return ((byte)(seconds / 60 / 60 %24 - (ulong)(_24Hour ? 0 : 12)));
+    public byte GetHours24() {
+        return ((byte)(seconds / 60 / 60 %24));
+    }
+    public byte GetHours12(){
+        return (byte)(GetHours24()%12);
     }
     public byte GetMinutes() {
         return ((byte)(seconds / 60 % 60 ));

@@ -24,5 +24,4 @@ class Temperature{
     public double GetFahrenheit(){
         return GetCelsius()*9/5 +32;
     }
-    /*static */
 }

@@ -4,7 +4,8 @@ namespace _30._09_2024;
 
 class Program
 {
-    static void Main(string[] args){
+    static void Main(string[] args)
+    {
         double a = new Temperature()
             .SetKelvin(4) // same Temperature;
             .GetFahrenheit();
