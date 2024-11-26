@@ -13,6 +13,7 @@ namespace Library
             node.Delete(node.GetNext().GetNext());
             Console.WriteLine("delete third element");
             Console.WriteLine(node.ToStringRecursive());
+            Console.WriteLine(node.Previous(node.GetNext().GetNext().GetNext()).ToStringRecursive());
         }
     }
 }

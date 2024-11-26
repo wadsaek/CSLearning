@@ -21,7 +21,7 @@ public static class ListServices
 
     public static Node<T> Insert<T>(this Node<T> p, T value)
     {
-        if(p == null)
+        if (p == null)
         {
             return new Node<T>(value);
         }
@@ -34,21 +34,16 @@ public static class ListServices
 
     public static string ToStringRecursive<T>(this Node<T> head)
     {
-        string rest;
-        if (head.GetNext() != null)
-        {
-            rest = head.GetNext().ToStringRecursive();
-        }
-        else
-        {
-            rest = "\b\b";
-        }
+        string rest = head.GetNext() != null
+            ? head.GetNext().ToStringRecursive()
+            : "\b\b";
+
         return $"({head}, {rest})";
     }
 
     public static void Delete<T>(this Node<T> p, Node<T> target)
     {
-        if(p.GetNext() == target)
+        if (p.GetNext() == target)
         {
             p.SetNext(target.GetNext());
             return;
@@ -56,5 +51,16 @@ public static class ListServices
         Delete(p.GetNext(), target);
     }
 
+    public static Node<T> Previous<T>(this Node<T> list, Node<T> target)
+    {
+        if (list.GetNext() == null) return null;
+        if (list.GetNext() == target) return list;
 
+        return Previous(list.GetNext(), target);
+    }
+
+    public static int LengthToNull<T>(this Node<T> list)
+    {
+
+    }
 }
