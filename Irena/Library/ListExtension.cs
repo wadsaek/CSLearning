@@ -77,4 +77,13 @@ public static class ListExtension {
         }
         return head.GetNext();
     }
+
+    public static string StringFromTo(this Node<int> node, int start, int end) {
+        if (start != 0) {
+            return StringFromTo(node.GetNext(), start - 1, end - 1);
+        }
+        if (end == 0) { return $"({node.GetInfo()})"; }
+        string rest = StringFromTo(node.GetNext(), 0, end - 1);
+        return $"({node.GetInfo()}, {rest})";
+    }
 }
