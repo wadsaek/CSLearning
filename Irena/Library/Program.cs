@@ -11,6 +11,9 @@ namespace Library {
             node.Delete(node.GetNext().GetNext());
             Console.WriteLine("delete third element");
             Console.WriteLine(node.ToStringRecursive());
+
+
+            Console.WriteLine(arr.BuildList().StringFromTo(1, 3));
             Console.WriteLine(node.Previous(node.GetNext().GetNext().GetNext()).ToStringRecursive());
 
             Console.WriteLine(arr.BuildList().Intersection(arr2.BuildList()).ToStringRecursive());
