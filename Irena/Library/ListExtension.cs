@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
@@ -85,5 +86,26 @@ public static class ListExtension {
         if (end == 0) { return $"({node.GetInfo()})"; }
         string rest = StringFromTo(node.GetNext(), 0, end - 1);
         return $"({node.GetInfo()}, {rest})";
+    }
+
+    public static bool IsAscending(this Node<int> node) {
+        Node<int> next = node.GetNext();
+        if (next == null) return true;
+        if (next.GetInfo() > node.GetInfo()) return next.IsAscending();
+        return false;
+    }
+    public static bool IsDescending(this Node<int> node) {
+        Node<int> next = node.GetNext();
+        if (next == null) return true;
+        if (next.GetInfo() < node.GetInfo()) return next.IsDescending();
+        return false;
+    }
+
+    public static bool IsSorted(this Node<int> node) {
+        Node<int> next = node.GetNext();
+        if (next == null) return true;
+        if (next.GetInfo() > node.GetInfo()) return next.IsAscending();
+        if (next.GetInfo() < node.GetInfo()) return next.IsDescending();
+        return false;
     }
 }
