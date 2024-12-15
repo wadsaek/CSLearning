@@ -2,39 +2,45 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace _08._12._2024 {
     public class Date {
-        uint _days;
-        public Date(uint year, byte month, byte day) {
-            _days += year * 365;
-            if(month <= 12) _days += (uint)(month * 31);
-            if (day <= 31) _days += day;
+        uint years;
+        byte months;
+        byte days;
+        public Date(uint years, byte months, byte days) {
+            SetDays(days);
+            SetMonths(months);
+            SetYears(years);            
         }
         public Date(Date date) {
-            _days = date._days;
+            days = date.days;
+            months = date.months;
+            years = date.years;
         }
 
-        public void AddSubtractMonths(sbyte month) {
-            if (month <= 12 && month >= -12 && month * -31 < _days) _days = (uint)((int)_days +(month * 31));
+        public void SetYears(uint year) {
+            years = year;
         }
-        public void AddSubtractYears(int years) {
-            if (years * -365 < _days) _days = (uint)((int)_days + (years * 365));
+        public void SetMonths(byte months) {
+            if (months <= 12) this.months = months;
         }
-        public void AddSubtractDays(sbyte days) {
-            if (days <= 12 && days >= -12 && -days < _days) _days = (uint)((int)_days + days);
+        public void SetDays(byte days) {
+            if (days <= 31) this.days = days;
         }
+
         public byte GetDays() {
-            return (byte)(_days % 31);
+            return days;
         }
         public byte GetMonths() {
-            return (byte)((_days / 31) %12);
+            return months;
         }
-        public byte GetYears() {
-            return (byte)(_days / 365);
+        public uint GetYears() {
+            return years;
         }
 
         public override string ToString() {
