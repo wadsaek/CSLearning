@@ -1,7 +1,10 @@
 using System;
 using System.Dynamic;
 using System.Linq.Expressions;
+using System.Net.WebSockets;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
+using System.Security;
 using Unit4.CollectionsLib;
 
 namespace Library;
@@ -85,5 +88,97 @@ public static class ListExtension {
         if (end == 0) { return $"({node.GetInfo()})"; }
         string rest = StringFromTo(node.GetNext(), 0, end - 1);
         return $"({node.GetInfo()}, {rest})";
+    }
+
+    public static void Reverse<T>(ref Node<T> node) {
+        Node<T> previous = null;
+        Node<T> current = node;
+        while (current != null) {
+            Node<T> next = current.GetNext();
+            current.SetNext(previous);
+            previous = current;
+            current = next;
+        }
+        node = current;
+    }
+
+    public static bool IsSorted(this Node<int> node) {
+        if (node == null) return true;
+        if (node.GetNext() == null) return true;
+
+        Node<int> next = node.GetNext();
+        if (next.GetInfo() > node.GetInfo()) return next.IsAscending();
+        if (next.GetInfo() < node.GetInfo()) return next.IsDescending();
+        return true;
+    }
+
+    public static bool IsAscending(this Node<int> node) {
+        if (node == null) return true;
+        if (node.GetNext() == null) return true;
+
+        Node<int> next = node.GetNext();
+        if (next.GetInfo() >= node.GetInfo()) return next.IsAscending(); else return false;
+    }
+
+    public static bool IsDescending(this Node<int> node) {
+        if (node == null) return true;
+        if (node.GetNext() == null) return true;
+
+        Node<int> next = node.GetNext();
+        if (next.GetInfo() <= node.GetInfo()) return next.IsDescending(); else return false;
+    }
+
+    public static void InsertSorted(ref Node<int> node, int value) {
+        if (node == null) return;
+
+        if (node.GetInfo() >= value) {
+            Node<int> temp = new Node<int>(value, node);
+            node = temp;
+            return;
+        }
+        Node<int> next = node.GetNext();
+        
+        if (next  == null || next.GetInfo() >= value) {
+            node.SetNext(new Node<int>(value, next));
+            return;
+        }
+        InsertSorted(ref next, value);
+
+    }
+
+    public static Node<int> NewSorted(this Node<int> node) {
+        Node<int> temp = new Node<int>(node.GetInfo());
+        node = node.GetNext();
+        while (node != null) {
+            InsertSorted(ref temp, node.GetInfo());
+            node = node.GetNext();
+        }
+        return temp;
+    }
+
+    public static void RemoveDuplicates(this Node<int> node) {
+        Node<int> next= node.GetNext();
+        if (next == null) return;
+        if(next.GetInfo() == node.GetInfo()) {
+            node.SetNext(next.GetNext());
+            RemoveDuplicates(node);
+        } else {
+            RemoveDuplicates(next);
+        }
+    }
+
+    public static Node<int> WithoutDuplicates(this Node<int> node) {
+        int lastValue = node.GetInfo();
+        Node<int> list = new Node<int>(lastValue);
+        node = node.GetNext();
+
+        while(node != null) {
+            int nextValue = node.GetInfo();
+            if (nextValue != lastValue) {
+                list.SetNext(new Node<int>(nextValue));
+            }
+            node = node.GetNext();
+        }
+        return list;
     }
 }
