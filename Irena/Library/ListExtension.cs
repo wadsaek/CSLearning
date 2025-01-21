@@ -1,10 +1,4 @@
 using System;
-using System.Dynamic;
-using System.Linq.Expressions;
-using System.Net.WebSockets;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Security;
 using Unit4.CollectionsLib;
 
 namespace Library;
@@ -137,8 +131,8 @@ public static class ListExtension {
             return;
         }
         Node<int> next = node.GetNext();
-        
-        if (next  == null || next.GetInfo() >= value) {
+
+        if (next == null || next.GetInfo() >= value) {
             node.SetNext(new Node<int>(value, next));
             return;
         }
@@ -157,9 +151,9 @@ public static class ListExtension {
     }
 
     public static void RemoveDuplicates(this Node<int> node) {
-        Node<int> next= node.GetNext();
+        Node<int> next = node.GetNext();
         if (next == null) return;
-        if(next.GetInfo() == node.GetInfo()) {
+        if (next.GetInfo() == node.GetInfo()) {
             node.SetNext(next.GetNext());
             RemoveDuplicates(node);
         } else {
@@ -172,7 +166,7 @@ public static class ListExtension {
         Node<int> list = new Node<int>(lastValue);
         node = node.GetNext();
 
-        while(node != null) {
+        while (node != null) {
             int nextValue = node.GetInfo();
             if (nextValue != lastValue) {
                 list.SetNext(new Node<int>(nextValue));
@@ -180,5 +174,69 @@ public static class ListExtension {
             node = node.GetNext();
         }
         return list;
+    }
+
+    public static Node<int> JoinWith(this Node<int> node1, Node<int> node2) {
+        if (node1.IsAscending()) {
+            return node1.JoinWithAscending(node2);
+        }
+        return node1.JoinWithDescending(node2);
+    }
+
+    public static Node<int> JoinWithAscending(this Node<int> node1, Node<int> node2) {
+        Node<int> head;
+        if (node1.GetInfo() <= node2.GetInfo()) {
+            head = new Node<int>(node1.GetInfo());
+            node1 = node1.GetNext()
+        } else {
+            head = new Node<int>(node2.GetInfo());
+            node2 = node1.GetNext();
+        }
+        Node<int> returned = head;
+
+        while (node1 != null && node2 != null) {
+            if (node1 != null && (node2 != null || node1.GetInfo() <= node2.GetInfo())) {
+                head.SetNext(new Node<int>(node1.GetNext().GetInfo()));
+                head = head.GetNext();
+                node1 = node1.GetNext();
+            } else {
+                head.SetNext(new Node<int>(node2.GetNext().GetInfo()));
+                head = head.GetNext();
+                node2 = node2.GetNext();
+            }
+        }
+        return returned;
+    }
+    //public static Node<int> JoinWithDescending(this Node<int> node1, Node<int> node2) {
+    //    Node<int> head;
+    //    if (node1.GetInfo() >= node2.GetInfo()) {
+    //        head = new Node<int>(node1.GetInfo());
+    //        node1 = node1.GetNext()
+    //    } else {
+    //        head = new Node<int>(node2.GetInfo());
+    //        node2 = node1.GetNext();
+    //    }
+    //    Node<int> returned = head;
+    //
+    //    while (node1 != null && node2 != null) {
+    //        if (node1 != null && (node2 != null || node1.GetInfo() >= node2.GetInfo())) {
+    //            head.SetNext(new Node<int>(node1.SetNext()));
+    //            head = head.GetNext();
+    //            node1 = node1.GetNext();
+    //        } else {
+    //            head.SetNext(new Node<int>(node2.SetNext()));
+    //            head = head.GetNext();
+    //            node2 = node2.GetNext();
+    //        }
+    //    }
+    //}
+
+    public static bool Contains<T>(this Node<T> node, Func<Node<T>, bool> predicate) {
+        for (; node is not null; node = node.GetNext()) {
+            if (predicate(node)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
