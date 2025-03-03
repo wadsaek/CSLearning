@@ -53,7 +53,7 @@ public static class ListExtension {
         return LengthToNull(list.GetNext()) + 1;
     }
 
-    public static Node<int> Intersection(this Node<int> first, Node<int> second) {
+    public static Node<int> IntersectionSorted(this Node<int> first, Node<int> second) {
         Node<int> head = new Node<int>(0);
         Node<int> tail = head;
         while (first != null && second != null) {
@@ -187,7 +187,7 @@ public static class ListExtension {
         Node<int> head;
         if (node1.GetInfo() <= node2.GetInfo()) {
             head = new Node<int>(node1.GetInfo());
-            node1 = node1.GetNext()
+            node1 = node1.GetNext();
         } else {
             head = new Node<int>(node2.GetInfo());
             node2 = node1.GetNext();
@@ -207,29 +207,30 @@ public static class ListExtension {
         }
         return returned;
     }
-    //public static Node<int> JoinWithDescending(this Node<int> node1, Node<int> node2) {
-    //    Node<int> head;
-    //    if (node1.GetInfo() >= node2.GetInfo()) {
-    //        head = new Node<int>(node1.GetInfo());
-    //        node1 = node1.GetNext()
-    //    } else {
-    //        head = new Node<int>(node2.GetInfo());
-    //        node2 = node1.GetNext();
-    //    }
-    //    Node<int> returned = head;
-    //
-    //    while (node1 != null && node2 != null) {
-    //        if (node1 != null && (node2 != null || node1.GetInfo() >= node2.GetInfo())) {
-    //            head.SetNext(new Node<int>(node1.SetNext()));
-    //            head = head.GetNext();
-    //            node1 = node1.GetNext();
-    //        } else {
-    //            head.SetNext(new Node<int>(node2.SetNext()));
-    //            head = head.GetNext();
-    //            node2 = node2.GetNext();
-    //        }
-    //    }
-    //}
+    public static Node<int> JoinWithDescending(this Node<int> node1, Node<int> node2) {
+        Node<int> head;
+        if (node1.GetInfo() >= node2.GetInfo()) {
+            head = new Node<int>(node1.GetInfo());
+            node1 = node1.GetNext();
+        } else {
+            head = new Node<int>(node2.GetInfo());
+            node2 = node1.GetNext();
+        }
+        Node<int> returned = head;
+
+        while (node1 != null && node2 != null) {
+            if (node1 != null && (node2 != null || node1.GetInfo() >= node2.GetInfo())) {
+                head.SetNext(new Node<int>(node1.GetNext().GetInfo()));
+                head = head.GetNext();
+                node1 = node1.GetNext();
+            } else {
+                head.SetNext(new Node<int>(node2.GetNext().GetInfo()));
+                head = head.GetNext();
+                node2 = node2.GetNext();
+            }
+        }
+        return returned;
+    }
 
     public static bool Contains<T>(this Node<T> node, Func<Node<T>, bool> predicate) {
         for (; node is not null; node = node.GetNext()) {
@@ -238,5 +239,24 @@ public static class ListExtension {
             }
         }
         return false;
+    }
+    public static bool Contains<T>(this Node<T> node, T target)
+    where T : IEquatable<T> {
+        return node.Contains(p => p.GetInfo().Equals(target));
+    }
+
+    public static Node<int> Intersection(this Node<int> node, Node<int> other) {
+        Node<int> head = new Node<int>(0);
+        Node<int> tail = head;
+
+        while (node is not null) {
+            if (other.Contains(p => p.GetInfo() == node.GetInfo())) {
+                tail.SetNext(new Node<int>(node.GetInfo()));
+                tail = tail.GetNext();
+                node = node.GetNext();
+            }
+        }
+        head = head.GetNext();
+        return head;
     }
 }

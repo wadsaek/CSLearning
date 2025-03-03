@@ -4,23 +4,24 @@ using Unit4.CollectionsLib;
 namespace Library {
     internal class Program {
         static void Main(string[] args) {
-            int[] arr = { 1, 68, 2, 56, 2, 5, 2, 54, 56, 76, 80 };
-            int[] arr2 = { 1, 4, 54, 80 };
-            Node<int> node = arr.BuildList();
-            Console.WriteLine(node.ToStringRecursive());
+            int[] a = [6,4,3,56,2,6];
+            var b = ListExtension.BuildList(a);
+            Console.WriteLine(b.ToStringRecursive());
+            Spend(b);
+            Console.WriteLine(b.ToStringRecursive());
 
-            node = node.NewSorted();
-            Console.WriteLine(node.ToStringRecursive());
+        }
+        static void Spend(Node<int> node){
+            while(node is not null)
+                node = node.GetNext();
+        }
+    }
+}
 
-            Console.WriteLine("new sorted array:");
-            Console.WriteLine(node.ToStringRecursive());
-
-
-            Node<int>sortedNewWithout = node.WithoutDuplicates();
-            Console.WriteLine(sortedNewWithout.ToStringRecursive());
-
-            node.RemoveDuplicates();
-            Console.WriteLine(node.ToStringRecursive());
+namespace NotLibrary{
+    internal class Huh{
+        static void Run(){
+            Queue<int> q = new Queue<int>();
         }
     }
 }
