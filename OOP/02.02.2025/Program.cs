@@ -16,8 +16,7 @@ class Program {
 
     static string[] MostUsedHospital(Resident[] arr) {
         return arr
-            .Select(b => b as Breathe)
-            .Where(b => b is not null)
+            .OfType<Breathe>()
             .Select(b => b!.Hospital)
             .GroupBy(h => h, (key, group) => new HospWithCount(key, group.Count()))
             .Aggregate(new { value = 0, arr = new List<HospWithCount>() }, (acc, cur) => {
