@@ -57,11 +57,11 @@ public static class ListExtension {
         Node<int> head = new Node<int>(0);
         Node<int> tail = head;
         while (first != null && second != null) {
-            int firstValue = first.GetInfo();
-            int secondValue = second.GetInfo();
+            int firstValue = first.GetValue();
+            int secondValue = second.GetValue();
 
             if (firstValue == secondValue) {
-                tail.SetNext(new Node<int>(first.GetInfo()));
+                tail.SetNext(new Node<int>(first.GetValue()));
                 tail = tail.GetNext();
 
                 first = first.GetNext();
@@ -79,9 +79,9 @@ public static class ListExtension {
         if (start != 0) {
             return StringFromTo(node.GetNext(), start - 1, end - 1);
         }
-        if (end == 0) { return $"({node.GetInfo()})"; }
+        if (end == 0) { return $"({node.GetValue()})"; }
         string rest = StringFromTo(node.GetNext(), 0, end - 1);
-        return $"({node.GetInfo()}, {rest})";
+        return $"({node.GetValue()}, {rest})";
     }
 
     public static void Reverse<T>(ref Node<T> node) {
@@ -101,8 +101,8 @@ public static class ListExtension {
         if (node.GetNext() == null) return true;
 
         Node<int> next = node.GetNext();
-        if (next.GetInfo() > node.GetInfo()) return next.IsAscending();
-        if (next.GetInfo() < node.GetInfo()) return next.IsDescending();
+        if (next.GetValue() > node.GetValue()) return next.IsAscending();
+        if (next.GetValue() < node.GetValue()) return next.IsDescending();
         return true;
     }
 
@@ -111,7 +111,7 @@ public static class ListExtension {
         if (node.GetNext() == null) return true;
 
         Node<int> next = node.GetNext();
-        if (next.GetInfo() >= node.GetInfo()) return next.IsAscending(); else return false;
+        if (next.GetValue() >= node.GetValue()) return next.IsAscending(); else return false;
     }
 
     public static bool IsDescending(this Node<int> node) {
@@ -119,20 +119,20 @@ public static class ListExtension {
         if (node.GetNext() == null) return true;
 
         Node<int> next = node.GetNext();
-        if (next.GetInfo() <= node.GetInfo()) return next.IsDescending(); else return false;
+        if (next.GetValue() <= node.GetValue()) return next.IsDescending(); else return false;
     }
 
     public static void InsertSorted(ref Node<int> node, int value) {
         if (node == null) return;
 
-        if (node.GetInfo() >= value) {
+        if (node.GetValue() >= value) {
             Node<int> temp = new Node<int>(value, node);
             node = temp;
             return;
         }
         Node<int> next = node.GetNext();
 
-        if (next == null || next.GetInfo() >= value) {
+        if (next == null || next.GetValue() >= value) {
             node.SetNext(new Node<int>(value, next));
             return;
         }
@@ -141,10 +141,10 @@ public static class ListExtension {
     }
 
     public static Node<int> NewSorted(this Node<int> node) {
-        Node<int> temp = new Node<int>(node.GetInfo());
+        Node<int> temp = new Node<int>(node.GetValue());
         node = node.GetNext();
         while (node != null) {
-            InsertSorted(ref temp, node.GetInfo());
+            InsertSorted(ref temp, node.GetValue());
             node = node.GetNext();
         }
         return temp;
@@ -153,7 +153,7 @@ public static class ListExtension {
     public static void RemoveDuplicates(this Node<int> node) {
         Node<int> next = node.GetNext();
         if (next == null) return;
-        if (next.GetInfo() == node.GetInfo()) {
+        if (next.GetValue() == node.GetValue()) {
             node.SetNext(next.GetNext());
             RemoveDuplicates(node);
         } else {
@@ -162,12 +162,12 @@ public static class ListExtension {
     }
 
     public static Node<int> WithoutDuplicates(this Node<int> node) {
-        int lastValue = node.GetInfo();
+        int lastValue = node.GetValue();
         Node<int> list = new Node<int>(lastValue);
         node = node.GetNext();
 
         while (node != null) {
-            int nextValue = node.GetInfo();
+            int nextValue = node.GetValue();
             if (nextValue != lastValue) {
                 list.SetNext(new Node<int>(nextValue));
             }
@@ -185,22 +185,22 @@ public static class ListExtension {
 
     public static Node<int> JoinWithAscending(this Node<int> node1, Node<int> node2) {
         Node<int> head;
-        if (node1.GetInfo() <= node2.GetInfo()) {
-            head = new Node<int>(node1.GetInfo());
+        if (node1.GetValue() <= node2.GetValue()) {
+            head = new Node<int>(node1.GetValue());
             node1 = node1.GetNext();
         } else {
-            head = new Node<int>(node2.GetInfo());
+            head = new Node<int>(node2.GetValue());
             node2 = node1.GetNext();
         }
         Node<int> returned = head;
 
         while (node1 != null && node2 != null) {
-            if (node1 != null && (node2 != null || node1.GetInfo() <= node2.GetInfo())) {
-                head.SetNext(new Node<int>(node1.GetNext().GetInfo()));
+            if (node1 != null && (node2 != null || node1.GetValue() <= node2.GetValue())) {
+                head.SetNext(new Node<int>(node1.GetNext().GetValue()));
                 head = head.GetNext();
                 node1 = node1.GetNext();
             } else {
-                head.SetNext(new Node<int>(node2.GetNext().GetInfo()));
+                head.SetNext(new Node<int>(node2.GetNext().GetValue()));
                 head = head.GetNext();
                 node2 = node2.GetNext();
             }
@@ -209,22 +209,22 @@ public static class ListExtension {
     }
     public static Node<int> JoinWithDescending(this Node<int> node1, Node<int> node2) {
         Node<int> head;
-        if (node1.GetInfo() >= node2.GetInfo()) {
-            head = new Node<int>(node1.GetInfo());
+        if (node1.GetValue() >= node2.GetValue()) {
+            head = new Node<int>(node1.GetValue());
             node1 = node1.GetNext();
         } else {
-            head = new Node<int>(node2.GetInfo());
+            head = new Node<int>(node2.GetValue());
             node2 = node1.GetNext();
         }
         Node<int> returned = head;
 
         while (node1 != null && node2 != null) {
-            if (node1 != null && (node2 != null || node1.GetInfo() >= node2.GetInfo())) {
-                head.SetNext(new Node<int>(node1.GetNext().GetInfo()));
+            if (node1 != null && (node2 != null || node1.GetValue() >= node2.GetValue())) {
+                head.SetNext(new Node<int>(node1.GetNext().GetValue()));
                 head = head.GetNext();
                 node1 = node1.GetNext();
             } else {
-                head.SetNext(new Node<int>(node2.GetNext().GetInfo()));
+                head.SetNext(new Node<int>(node2.GetNext().GetValue()));
                 head = head.GetNext();
                 node2 = node2.GetNext();
             }
@@ -242,7 +242,7 @@ public static class ListExtension {
     }
     public static bool Contains<T>(this Node<T> node, T target)
     where T : IEquatable<T> {
-        return node.Contains(p => p.GetInfo().Equals(target));
+        return node.Contains(p => p.GetValue().Equals(target));
     }
 
     public static Node<int> Intersection(this Node<int> node, Node<int> other) {
@@ -250,8 +250,8 @@ public static class ListExtension {
         Node<int> tail = head;
 
         while (node is not null) {
-            if (other.Contains(p => p.GetInfo() == node.GetInfo())) {
-                tail.SetNext(new Node<int>(node.GetInfo()));
+            if (other.Contains(p => p.GetValue() == node.GetValue())) {
+                tail.SetNext(new Node<int>(node.GetValue()));
                 tail = tail.GetNext();
                 node = node.GetNext();
             }

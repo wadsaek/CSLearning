@@ -9,14 +9,14 @@ class Program {
     }
 
     static Node<RangeNode> RangeList(Node<int> list) {
-        int first = list.GetInfo();
+        int first = list.GetValue();
         list = list.GetNext();
         Node<RangeNode> head = new Node<RangeNode>(new RangeNode(first, first));
         Node<RangeNode> tail = head;
 
         while (list != null) {
-            int current = list.GetInfo();
-            RangeNode currentRange = tail.GetInfo();
+            int current = list.GetValue();
+            RangeNode currentRange = tail.GetValue();
             if (current == currentRange.to + 1) {
                 currentRange.to = current;
             } else {

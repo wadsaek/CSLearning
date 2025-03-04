@@ -23,7 +23,7 @@ public static class BiListExtension {
         int?[] arr = new int?[counter];
         tail = list;
         for (int i = 0; i < arr.Length; i++) {
-            arr[i] = tail.GetInfo();
+            arr[i] = tail.GetValue();
             tail = tail.GetNext();
         }
         for (int i = 0; i < arr.Length / 2; i++) {
